@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="bg-gradient-to-b from-pink-50 to-white border-b">
+  <div class="max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-10 items-center">
+    <div>
+      <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Feel cute. Be bold. <span class="text-pink-600">Own your look.</span></h1>
+      <p class="mt-4 text-gray-600 text-lg">Hand‑picked capsule of 5 bestsellers. Limited stock, ships worldwide in 7 days for ${{ DELIVERY_FEE }}.</p>
+      <div class="mt-6 flex gap-3">
+        <a href="{{ url_for('shop') }}" class="px-5 py-3 rounded-2xl bg-pink-600 text-white font-semibold hover:opacity-90">Shop Now</a>
+        <a href="{{ url_for('checkout') }}" class="px-5 py-3 rounded-2xl border font-semibold hover:bg-gray-50">Go to Checkout</a>
+      </div>
+      <div class="mt-6 flex items-center gap-6 text-sm text-gray-600">
+        <div>⭐️⭐️⭐️⭐️☆ 1,200+ happy customers</div>
+        <div>🔒 Secure checkout</div>
+        <div>🚚 7‑day delivery</div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      
+      {% for p in products[:4] %}
+      <a href="{{ url_for('product_detail', pid=p.id) }}">
+      <div class="aspect-square rounded-2xl overflow-hidden border">
+        
+        <img src="{{ url_for('static', filename='images/' + p.images[0]) }}" alt="{{ p.name }}" class="w-full h-full object-cover">
+        
+      </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="max-w-6xl mx-auto px-4 py-12">
+  <h2 class="text-2xl font-bold mb-6">Why femboys love us</h2>
+  <div class="grid md:grid-cols-3 gap-6">
+    
+    <!-- Style that empowers -->
+    <div class="p-6 rounded-2xl border flex flex-col">
+      <div class="flex items-center gap-3 text-xl font-semibold">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21C12 21 4 13.5 4 8a4 4 0 018 0 4 4 0 018 0c0 5.5-8 13-8 13z"/>
+        </svg>
+        Style that empowers
+      </div>
+      <p class="text-gray-600 mt-2">Every piece is designed to celebrate softness, confidence, and self-expression—perfectly balancing cute and chic.</p>
+    </div>
+
+    <!-- Quality you can flaunt -->
+    <div class="p-6 rounded-2xl border flex flex-col">
+      <div class="flex items-center gap-3 text-xl font-semibold">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 16h10M5 12h14"/>
+        </svg>
+        Quality you can flaunt
+      </div>
+      <p class="text-gray-600 mt-2">From silky fabrics to playful prints, our clothes are made to stay comfy, durable, and Instagram-ready.</p>
+    </div>
+
+    <!-- Discreet, worldwide shipping -->
+    <div class="p-6 rounded-2xl border flex flex-col">
+      <div class="flex items-center gap-3 text-xl font-semibold">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18l-1.5 9h-15zM3 6h18M8 6V4h8v2"/>
+        </svg>
+        Discreet, worldwide shipping
+      </div>
+      <p class="text-gray-600 mt-2">Flat ${{ DELIVERY_FEE }} delivery worldwide in just 7 days—packaged with care and privacy in mind.</p>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

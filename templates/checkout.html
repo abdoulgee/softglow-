@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+<script src="https://www.paypal.com/sdk/js?client-id=AZQ9qF7TIIm94-CLgZHWwo5SzKSriFVsj1pT4jN9c1hZ6kVXhusiQwLbas7fSRXARhsBJka4J5mK00oi&currency=USD"></script>
+
+<section class="max-w-6xl mx-auto px-4 py-10">
+  <h1 class="text-3xl font-extrabold mb-6">Checkout</h1>
+  <div class="grid md:grid-cols-3 gap-8">
+    <div class="md:col-span-2">
+      <form method="post" class="space-y-4">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm font-semibold">Full Name</label>
+            <input required name="name" class="w-full border rounded-xl px-3 py-2">
+          </div>
+          <div>
+            <label class="text-sm font-semibold">Email</label>
+            <input required type="email" name="email" class="w-full border rounded-xl px-3 py-2">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="text-sm font-semibold">Address</label>
+            <input required name="address" class="w-full border rounded-xl px-3 py-2">
+          </div>
+          <div>
+            <label class="text-sm font-semibold">City</label>
+            <input required name="city" class="w-full border rounded-xl px-3 py-2">
+          </div>
+          <div>
+            <label class="text-sm font-semibold">Country</label>
+            <input required name="country" class="w-full border rounded-xl px-3 py-2">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="text-sm font-semibold">Phone (optional)</label>
+            <input name="phone" class="w-full border rounded-xl px-3 py-2">
+          </div>
+        </div>
+
+        <!-- PayPal Button (styled as Pay Securely) -->
+        <div id="paypal-button-container" class="mt-4"></div>
+
+        <div class="text-xs text-gray-500 mt-2">
+          🔒 Payments processed by PayPal. We never store your card details.
+        </div>
+      </form>
+    </div>
+
+    <!-- Order Summary -->
+    <div>
+      <div class="p-5 border rounded-2xl">
+        <div class="font-semibold mb-3">Order Summary</div>
+        <div class="space-y-3">
+          {% if not items %}
+            <div class="text-sm text-gray-600">Your cart is empty. <a href="{{ url_for('shop') }}" class="text-pink-600 underline">Add items</a>.</div>
+          {% endif %}
+          {% for i in items %}
+          <div class="flex items-center gap-3">
+            <img src="{{ url_for('static', filename='images/' + i.image) }}" class="w-14 h-14 rounded-lg object-cover border">
+            <div class="flex-1">
+              <div class="text-sm font-semibold">{{ i.name }}</div>
+              <div class="text-xs text-gray-600">Qty {{ i.qty }}</div>
+            </div>
+            <div class="text-sm font-semibold">${{ '%.2f'|format(i.subtotal) }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        <form method="post" action="{{ url_for('cart_update') }}" class="mt-4 space-y-2">
+          {% for i in items %}
+          <div class="flex items-center gap-2">
+            <label class="text-xs w-40 truncate">{{ i.name }}</label>
+            <input type="number" min="0" name="qty_{{ i.id }}" value="{{ i.qty }}" class="w-20 border rounded-xl px-2 py-1">
+          </div>
+          {% endfor %}
+          {% if items %}<button class="mt-2 px-3 py-1.5 rounded-xl border">Update Cart</button>{% endif %}
+        </form>
+        <div class="h-px bg-gray-200 my-4"></div>
+        <div class="flex justify-between text-sm"><span>Subtotal</span><span>${{ '%.2f'|format(subtotal) }}</span></div>
+        <div class="flex justify-between text-sm"><span>Delivery (7 days, worldwide)</span><span>${{ '%.2f'|format(delivery) }}</span></div>
+        <div class="flex justify-between text-lg font-bold mt-2"><span>Total</span><span>${{ '%.2f'|format(total) }}</span></div>
+      </div>
+      <div class="text-xs text-gray-500 mt-3">
+        ✅ 30-day returns · ✅ SSL secured · ✅ PayPal verified
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  paypal.Buttons({
+    style: {
+      color: 'blue',   // PayPal’s "blue" button
+      shape: 'pill',
+      label: 'pay',
+      height: 45
+    },
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: '{{ "%.2f"|format(total) }}'
+          }
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        // Send order details to Flask backend
+        fetch("{{ url_for('paypal_success') }}", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            orderID: data.orderID,
+            payer: details.payer
+          })
+        }).then(() => {
+          window.location.href = "{{ url_for('thankyou_contact') }}";
+        });
+      });
+    }
+  }).render('#paypal-button-container');
+</script>
+
+{% endblock %}

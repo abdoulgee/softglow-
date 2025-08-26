@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title or "SoftGlow Apparel" }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>body{font-family:Inter,system-ui,sans-serif}</style>
+</head>
+<body class="bg-white text-gray-900">
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="{{ url_for('home') }}" class="font-extrabold text-2xl">SoftGlow</a>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="{{ url_for('home') }}" class="hover:text-pink-600">Home</a>
+        <a href="{{ url_for('shop') }}" class="hover:text-pink-600">Shop</a>
+        <a href="{{ url_for('checkout') }}" class="hover:text-pink-600">Checkout</a>
+      </nav>
+      <a href="{{ url_for('checkout') }}" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border hover:bg-gray-50">
+        <span>Cart</span>
+        <span class="text-xs bg-pink-600 text-white rounded-lg px-2 py-0.5">
+          {{ (session.get('cart')|default({}))|length if session.get('cart') else 0 }}
+        </span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="border-t mt-16 bg-gradient-to-b from-pink-50 to-white">
+    <div class="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-8 text-gray-700">
+      
+      <!-- Brand -->
+      <div>
+        <div class="font-extrabold text-2xl text-pink-600 mb-3">SoftGlow</div>
+        <p class="text-sm text-gray-600 leading-relaxed">
+          Cute, comfy, and confident. Worldwide delivery in 7 days for ${{ DELIVERY_FEE }}.
+        </p>
+        <div class="flex space-x-3 mt-4">
+          <!-- Social icons -->
+          <a href="#" class="p-2 rounded-full bg-pink-100 text-pink-600 hover:bg-pink-200 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22.54 6.42a8.86 8.86 0 0 1-2.55.7 4.42 4.42 0 0 0 1.94-2.44 8.9 8.9 0 0 1-2.82 1.08 4.42 4.42 0 0 0-7.66 3.02c0 .35.04.7.11 1.03a12.54 12.54 0 0 1-9.1-4.62 4.42 4.42 0 0 0 1.37 5.9 4.39 4.39 0 0 1-2-.56v.06c0 2.16 1.54 3.96 3.58 4.37a4.42 4.42 0 0 1-2 .07 4.42 4.42 0 0 0 4.13 3.07A8.9 8.9 0 0 1 2 19.54a12.57 12.57 0 0 0 6.81 2c8.18 0 12.65-6.77 12.65-12.65 0-.19 0-.37-.01-.55a9.04 9.04 0 0 0 2.09-2.17z"/></svg>
+          </a>
+          <a href="#" class="p-2 rounded-full bg-pink-100 text-pink-600 hover:bg-pink-200 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.04c-5.52 0-10 4.48-10 10 0 4.41 3.59 8 8 8 .67 0 1.32-.09 1.94-.26-.27-.7-.57-1.8.05-3.19 0 0 1.1-.36 3.6 1.38 1.05-.29 2.18-.44 3.31-.44 1.13 0 2.26.15 3.31.44 2.49-1.74 3.6-1.38 3.6-1.38.62 1.39.32 2.49.05 3.19.62.17 1.27.26 1.94.26 4.41 0 8-3.59 8-8 0-5.52-4.48-10-10-10z"/></svg>
+          </a>
+          <a href="#" class="p-2 rounded-full bg-pink-100 text-pink-600 hover:bg-pink-200 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c-5.47 0-9.838 4.367-9.838 9.838 0 4.353 3.523 7.954 7.828 8.725v-6.17h-2.35v-2.555h2.35v-1.954c0-2.324 1.393-3.592 3.509-3.592.998 0 2.04.177 2.04.177v2.243h-1.15c-1.136 0-1.49.707-1.49 1.43v1.696h2.54l-.406 2.555h-2.134v6.17c4.305-.77 7.828-4.372 7.828-8.725 0-5.471-4.367-9.838-9.838-9.838z"/></svg>
+          </a>
+        </div>
+      </div>
+  
+      <!-- Trust & Safety -->
+      <div>
+        <div class="font-semibold mb-3 text-gray-800">Trust & Safety</div>
+        <ul class="text-sm text-gray-600 space-y-2">
+          <li class="flex items-center gap-2">✔ 256-bit SSL</li>
+          <li class="flex items-center gap-2">✔ Secure Paypal Checkout</li>
+          <li class="flex items-center gap-2">✔ 30-day easy returns</li>
+        </ul>
+      </div>
+  
+      <!-- Support -->
+      <div>
+        <div class="font-semibold mb-3 text-gray-800">Support</div>
+        <p class="text-sm text-gray-600">Email: <a href="mailto:nollandarts773@gmail.com" class="text-pink-600 hover:underline">nollandarts773@gmail.com</a></p>
+        <p class="text-sm text-gray-600 mt-1">Live chat: Mon-Fri, 9am-6pm</p>
+      </div>
+  
+      <!-- Legal -->
+      <div>
+        <div class="font-semibold mb-3 text-gray-800">Legal</div>
+        <p class="text-sm text-gray-600">© {{ 2025 }} SoftGlow. All rights reserved.</p>
+        <p class="text-sm text-gray-600 mt-1"><a href="#" class="hover:underline">Privacy Policy</a> • <a href="#" class="hover:underline">Terms</a></p>
+      </div>
+      
+    </div>
+  </footer>
+  
+</body>
+</html>

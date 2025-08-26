@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="max-w-3xl mx-auto px-4 py-14">
+  <div class="p-6 border rounded-2xl">
+    <h1 class="text-3xl font-extrabold">Thank you! 🎉</h1>
+    <p class="mt-2 text-gray-700">Your order was placed successfully{% if customer and customer.name %}, {{ customer.name }}{% endif %}. A receipt will arrive at{% if customer and customer.email %} {{ customer.email }}{% else %} your email{% endif %}.</p>
+    <p class="mt-1 text-gray-600">Delivery: 7 days worldwide · Flat ${{ DELIVERY_FEE }}.</p>
+    <a href="{{ url_for('shop') }}" class="inline-block mt-4 px-5 py-3 rounded-2xl bg-pink-600 text-white font-semibold">Continue Shopping</a>
+  </div>
+
+  <div class="mt-8 p-6 border rounded-2xl">
+    <h2 class="text-xl font-bold mb-2">Contact Us</h2>
+    {% if submitted %}
+      <div class="p-3 rounded-xl bg-green-50 border text-green-700 text-sm">Thanks! We received your message.</div>
+    {% endif %}
+    <form method="post" class="space-y-3 mt-2">
+      <div>
+        <label class="text-sm font-semibold">Email</label>
+        <input required type="email" name="email" class="w-full border rounded-xl px-3 py-2">
+      </div>
+      <div>
+        <label class="text-sm font-semibold">Message</label>
+        <textarea required name="message" rows="4" class="w-full border rounded-xl px-3 py-2"></textarea>
+      </div>
+      <button class="px-5 py-2 rounded-2xl border">Send</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
