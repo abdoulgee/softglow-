@@ -1,17 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api/index"
-    }
-  ],
   "functions": {
     "api/index.py": {
       "runtime": "python3.12"
     }
   },
-  "regions": [
-    "fra1"
-  ]
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api/index" }
+  ],
+  "regions": ["fra1"]
 }
