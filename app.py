@@ -4,6 +4,7 @@ from datetime import timedelta
 from products import PRODUCTS
 from dotenv import load_dotenv
 from datetime import datetime
+import requests
 
 load_dotenv()
 
@@ -19,12 +20,13 @@ def create_app():
     PAYPAL_CLIENT_ID = os.getenv("PAYPAL_CLIENT_ID", "YAZQ9qF7TIIm94-CLgZHWwo5SzKSriFVsj1pT4jN9c1hZ6kVXhusiQwLbas7fSRXARhsBJka4J5mK00oi")
     PAYPAL_SECRET = os.getenv("PAYPAL_SECRET", "YEB-d7StEQM99EhEZOdZzxPyzK1g9HdSawMRI4HXA5jlglS9iLSs31zF4xYOwxmxFtg2N-poDdVM39KWA")
     PAYPAL_API_BASE = "https://api-m.paypal.com"   # sandbox: https://api-m.sandbox.paypal.com
+    
     def get_paypal_access_token():
         """Get OAuth access token from PayPal"""
         auth = (PAYPAL_CLIENT_ID, PAYPAL_SECRET)
         headers = {"Accept": "application/json", "Accept-Language": "en_US"}
         data = {"grant_type": "client_credentials"}
-        r = request.post(f"{PAYPAL_API_BASE}/v1/oauth2/token", auth=auth, data=data, headers=headers)
+        r = requests.post(f"{PAYPAL_API_BASE}/v1/oauth2/token", auth=auth, data=data, headers=headers)
         r.raise_for_status()
         return r.json()["access_token"]
     @app.route("/paypal-success", methods=["POST"])
